@@ -1,0 +1,9 @@
+{
+  "name": "auto-format-on-save",
+  "description": "ファイル保存時に自動でコード整形とimport整理",
+  "trigger": {
+    "type": "file-save",
+    "filePattern": "**/*.{js,ts,jsx,tsx}"
+  },
+  "instructions": "ファイルが保存されたら、以下を順番に実行してください：\n\n1. ESLintで問題をチェック\n   - 自動修正可能なものは修正\n   - 修正できない問題はリストアップ\n\n2. Prettierでコードフォーマット\n   - プロジェクトの.prettierrc設定に従う\n   - なければデフォルト設定を使用\n\n3. import文の整理\n   - 未使用のimportを削除\n   - import順を整理（外部→内部→相対パス）\n   - 重複したimportを統合\n\n4. console.logの検出\n   - 本番コードに残っていたら警告\n   - デバッグ用なら /* debug */ コメントを追加するよう提案"
+}

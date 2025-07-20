@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": "Update Tests on Implementation Change",
+  "description": "Automatically updates corresponding test files when implementation files are modified",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "*.js",
+      "*.ts",
+      "*.jsx",
+      "*.tsx",
+      "*.mjs",
+      "*.cjs"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "An implementation file has been changed. Please analyze the changes and update the corresponding test files to ensure they cover the new or modified functionality. Focus on maintaining test coverage and updating any test cases that may be affected by the implementation changes."
+  }
+}
