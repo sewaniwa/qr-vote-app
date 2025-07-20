@@ -1,0 +1,21 @@
+{
+  "name": "amplify-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && node --enable-source-maps dist/backend.js",
+    "sandbox": "ampx sandbox",
+    "deploy": "ampx deploy"
+  },
+  "devDependencies": {
+    "@aws-amplify/backend": "^1.0.0",
+    "@aws-amplify/backend-cli": "^1.0.0",
+    "aws-cdk-lib": "^2.100.0",
+    "constructs": "^10.3.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.400.0",
+    "@aws-sdk/lib-dynamodb": "^3.400.0"
+  }
+}
