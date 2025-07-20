@@ -48,15 +48,13 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
             }
           }
           if (error && error.name !== 'NotFoundException') {
-            console.error('QR scan error:', error);
           }
         }
       );
-    } catch (error) {
-      console.error('カメラアクセスエラー:', error);
+    } catch (_error) {
       setHasPermission(false);
       setIsScanning(false);
-      onScanError(error instanceof Error ? error.message : 'カメラアクセスに失敗しました');
+      onScanError(_error instanceof Error ? _error.message : 'カメラアクセスに失敗しました');
     }
   };
 
@@ -73,8 +71,7 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
       stream.getTracks().forEach(track => track.stop());
       setHasPermission(true);
       startScanning();
-    } catch (error) {
-      console.error('カメラ許可エラー:', error);
+    } catch (_error) {
       setHasPermission(false);
       onScanError('カメラへのアクセス許可が必要です');
     }
@@ -93,7 +90,23 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
           <p className="text-gray-600 mb-4">QRコードをスキャンするためにカメラへのアクセスを許可してください。</p>
           <button
             onClick={requestCameraPermission}
-            className="vote-button"
+            style={{
+              backgroundColor: '#2563eb',
+              color: '#ffffff',
+              fontWeight: 'bold',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '16px',
+              transition: 'background-color 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#1d4ed8';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#2563eb';
+            }}
           >
             カメラを有効にする
           </button>
@@ -125,7 +138,24 @@ export default function QRScanner({ onScanSuccess, onScanError }: QRScannerProps
           {!isScanning ? (
             <button
               onClick={startScanning}
-              className="w-full vote-button"
+              style={{
+                backgroundColor: '#2563eb',
+                color: '#ffffff',
+                fontWeight: 'bold',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '16px',
+                transition: 'background-color 0.3s ease',
+                width: '100%'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#1d4ed8';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#2563eb';
+              }}
             >
               スキャン開始
             </button>

@@ -1,7 +1,7 @@
 {
   "name": "qr-vote-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "QRコードベースの安全なオンライン投票システム",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
@@ -14,9 +14,9 @@
     "type": "git",
     "url": "git+https://github.com/sewaniwa/qr-vote-app.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["voting", "qr-code", "nextjs", "typescript", "tailwindcss"],
+  "author": "sewaniwa",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/sewaniwa/qr-vote-app/issues"

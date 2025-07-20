@@ -4,15 +4,34 @@
 
 ### 1. 前提条件
 
-- AWS CLI がインストールされ、設定済み
-- Node.js 18+ がインストール済み
-- AWS Amplify CLI v12+ がインストール済み
+- **Node.js 18+** がインストール済み
+- **Git** がインストール済み
+- **AWS CLI** がインストールされ、設定済み（バックエンド使用時）
+- **AWS Amplify CLI v12+** がインストール済み（バックエンド使用時）
 
 ```bash
+# バックエンド使用時のみ必要
 npm install -g @aws-amplify/cli
 ```
 
-### 2. Amplify バックエンドのデプロイ
+### 1.1. フロントエンドのみ（静的サイト）の場合
+
+**現在のステータス**: フロントエンドは完全に実装済みで、静的サイトとしてデプロイ可能
+
+```bash
+# プロダクションビルド
+npm run build
+
+# 生成された out/ ディレクトリを任意の静的ホスティングサービスにデプロイ
+# - Vercel
+# - Netlify  
+# - GitHub Pages
+# - AWS S3 + CloudFront
+```
+
+### 1.2. Amplify バックエンドのデプロイ（今後の実装）
+
+**注意**: バックエンド機能は現在未実装です。以下は将来の実装計画です。
 
 ```bash
 # Amplifyディレクトリに移動
@@ -31,30 +50,80 @@ npx ampx sandbox
 npx ampx deploy --branch main
 ```
 
-### 3. 環境変数の設定
+## 🌐 静的サイトホスティング (推奨)
 
-デプロイ後、生成された設定値を `.env.local` に設定：
+### Vercel でのデプロイ
+
+```bash
+# Vercel CLI のインストール
+npm i -g vercel
+
+# デプロイ実行
+vercel
+
+# プロダクション環境にデプロイ
+vercel --prod
+```
+
+### Netlify でのデプロイ
+
+```bash
+# Netlify CLI のインストール
+npm install -g netlify-cli
+
+# ビルド
+npm run build
+
+# デプロイ
+netlify deploy --dir=out
+
+# プロダクション環境にデプロイ
+netlify deploy --prod --dir=out
+```
+
+### GitHub Pages でのデプロイ
+
+1. リポジトリの Settings > Pages に移動
+2. Source を "GitHub Actions" に設定
+3. 以下のワークフローファイルを作成: `.github/workflows/deploy.yml`
+
+```yaml
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build
+        run: npm run build
+        
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+```
+
+## 🔧 環境変数の設定 (バックエンド実装後)
 
 ```bash
 cp .env.example .env.local
 # 生成された値で .env.local を更新
-```
-
-### 4. フロントエンドのデプロイ
-
-```bash
-# メインディレクトリに戻る
-cd ..
-
-# 依存関係のインストール
-npm install
-
-# ビルドとテスト
-npm run build
-npm run lint
-npm run type-check
-
-# Vercel/Netlify等にデプロイ
 ```
 
 ## 🔧 設定

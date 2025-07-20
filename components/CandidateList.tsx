@@ -37,8 +37,26 @@ export default function CandidateList({
         {sortedCandidates.map((candidate) => (
           <div
             key={candidate.candidateId}
-            className={`candidate-card ${selectedCandidate === candidate.candidateId ? 'selected' : ''} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+            style={{
+              border: `2px solid ${selectedCandidate === candidate.candidateId ? '#3b82f6' : '#e5e7eb'}`,
+              borderRadius: '8px',
+              padding: '16px',
+              cursor: disabled ? 'not-allowed' : 'pointer',
+              backgroundColor: selectedCandidate === candidate.candidateId ? '#eff6ff' : '#ffffff',
+              transition: 'all 0.3s ease'
+            }}
             onClick={() => !disabled && onCandidateSelect(candidate.candidateId)}
+            onMouseEnter={(e) => {
+              if (!disabled && selectedCandidate !== candidate.candidateId) {
+                e.currentTarget.style.borderColor = '#93c5fd';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!disabled && selectedCandidate !== candidate.candidateId) {
+                e.currentTarget.style.borderColor = '#e5e7eb';
+              }
+            }}
           >
             <div className="flex items-center space-x-3">
               <input

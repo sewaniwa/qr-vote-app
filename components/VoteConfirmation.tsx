@@ -55,13 +55,47 @@ export default function VoteConfirmation({ candidate, onConfirm, onCancel }: Vot
       <div className="flex space-x-3">
         <button
           onClick={onCancel}
-          className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-colors"
+          style={{
+            flex: 1,
+            backgroundColor: '#6b7280',
+            color: '#ffffff',
+            fontWeight: 'bold',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '16px',
+            transition: 'background-color 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#4b5563';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#6b7280';
+          }}
         >
           戻る
         </button>
         <button
           onClick={onConfirm}
-          className="flex-1 vote-button"
+          style={{
+            flex: 1,
+            backgroundColor: '#2563eb',
+            color: '#ffffff',
+            fontWeight: 'bold',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '16px',
+            transition: 'background-color 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#1d4ed8';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#2563eb';
+          }}
         >
           投票する
         </button>

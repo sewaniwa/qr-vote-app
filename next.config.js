@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
+  trailingSlash: true,
+  assetPrefix: '',
   experimental: {
     typedRoutes: true,
   },
@@ -8,7 +10,6 @@ const nextConfig = {
     domains: [],
     unoptimized: true,
   },
-  // WSL環境での性能向上設定
   webpack: (config, { dev }) => {
     if (dev) {
       config.watchOptions = {

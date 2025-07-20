@@ -7,7 +7,6 @@ import CandidateList from '@/components/CandidateList';
 import VoteConfirmation from '@/components/VoteConfirmation';
 import { useVotingState } from '@/lib/useVotingState';
 import { Candidate, VotingErrorType } from '@/types/voting';
-// import { verifyQRToken, castVote, getCandidates, checkVotingPeriod, checkIfAlreadyVoted } from '@/lib/api';
 
 // 仮のデータ（実際の実装ではAPIから取得）
 const mockCandidates: Candidate[] = [
@@ -57,8 +56,7 @@ export default function VotingPage() {
       actions.setVoterToken('demo-token-' + Date.now());
       setCurrentStep('candidate-selection');
       toast.success('認証が完了しました。候補者を選択してください。');
-    } catch (error) {
-      console.error('QR scan error:', error);
+    } catch (_error) {
       actions.setError(actions.createError(
         VotingErrorType.SYSTEM_ERROR,
         'システムエラーが発生しました。しばらく待ってから再試行してください。',
@@ -101,8 +99,7 @@ export default function VotingPage() {
       actions.setHasVoted(true);
       setCurrentStep('vote-complete');
       toast.success('投票が完了しました。ありがとうございました。');
-    } catch (error) {
-      console.error('Vote submission error:', error);
+    } catch (_error) {
       actions.setError(actions.createError(
         VotingErrorType.SYSTEM_ERROR,
         '投票の送信に失敗しました。再試行してください。',
@@ -166,7 +163,12 @@ export default function VotingPage() {
         </div>
 
         {/* メインコンテンツ */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="bg-white rounded-lg shadow-md p-6" style={{
+          backgroundColor: '#ffffff',
+          borderRadius: '8px',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+          padding: '24px'
+        }}>
           {currentStep === 'qr-scan' && (
             <QRScanner
               onScanSuccess={handleQRScanSuccess}
@@ -186,8 +188,28 @@ export default function VotingPage() {
                 <div className="mt-6 text-center">
                   <button
                     onClick={proceedToConfirmation}
-                    className="vote-button"
                     disabled={state.loading}
+                    style={{
+                      backgroundColor: state.loading ? '#9ca3af' : '#2563eb',
+                      color: '#ffffff',
+                      fontWeight: 'bold',
+                      padding: '12px 24px',
+                      borderRadius: '8px',
+                      border: 'none',
+                      cursor: state.loading ? 'not-allowed' : 'pointer',
+                      fontSize: '16px',
+                      transition: 'background-color 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!state.loading) {
+                        e.currentTarget.style.backgroundColor = '#1d4ed8';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!state.loading) {
+                        e.currentTarget.style.backgroundColor = '#2563eb';
+                      }
+                    }}
                   >
                     投票内容を確認する
                   </button>
@@ -273,22 +295,6 @@ export default function VotingPage() {
           )}
         </div>
 
-        {/* デバッグ情報（開発時のみ） */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="mt-8 p-4 bg-gray-100 rounded-lg">
-            <h3 className="font-bold mb-2">Debug Info</h3>
-            <p>Current Step: {currentStep}</p>
-            <p>Selected Candidate: {state.selectedCandidate}</p>
-            <p>Voter Token: {state.voterToken ? 'Present' : 'None'}</p>
-            <p>Has Voted: {state.hasVoted ? 'Yes' : 'No'}</p>
-            <button
-              onClick={resetFlow}
-              className="mt-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
-            >
-              Reset Flow
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
