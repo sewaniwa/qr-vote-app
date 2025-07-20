@@ -6,8 +6,8 @@ import QRScanner from '@/components/QRScanner';
 import CandidateList from '@/components/CandidateList';
 import VoteConfirmation from '@/components/VoteConfirmation';
 import { useVotingState } from '@/lib/useVotingState';
-import { Candidate, VotingErrorType, VotingSessionStatus } from '@/types/voting';
-import { verifyQRToken, castVote, getCandidates, checkVotingPeriod, checkIfAlreadyVoted } from '@/lib/api';
+import { Candidate, VotingErrorType } from '@/types/voting';
+// import { verifyQRToken, castVote, getCandidates, checkVotingPeriod, checkIfAlreadyVoted } from '@/lib/api';
 
 // 仮のデータ（実際の実装ではAPIから取得）
 const mockCandidates: Candidate[] = [
@@ -42,74 +42,21 @@ export default function VotingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    // Initialize with API data
-    const loadCandidates = async () => {
-      try {
-        const { candidates } = await getCandidates();
-        actions.setCandidates(candidates);
-      } catch (error) {
-        console.error('Failed to load candidates:', error);
-        // Fallback to mock data
-        actions.setCandidates(mockCandidates);
-      }
-    };
-    
-    loadCandidates();
+    // Initialize with mock data for static export
+    actions.setCandidates(mockCandidates);
   }, [actions]);
 
-  const handleQRScanSuccess = async (token: string) => {
+  const handleQRScanSuccess = async () => {
     try {
       actions.setLoading(true);
       actions.clearError();
 
-      // QRトークンの検証（APIを呼び出し）
-      const tokenResult = await verifyQRToken(token);
+      // Static demo - simulate successful QR scan
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      if (tokenResult.isValid && tokenResult.sessionToken) {
-        actions.setVoterToken(tokenResult.sessionToken);
-        
-        // 投票期間のチェック
-        const periodResult = await checkVotingPeriod();
-        
-        if (periodResult.status === 'ACTIVE') {
-          // 既に投票済みかチェック
-          const hasAlreadyVoted = await checkIfAlreadyVoted(tokenResult.sessionToken);
-          
-          if (hasAlreadyVoted) {
-            actions.setHasVoted(true);
-            actions.setError(actions.createError(
-              VotingErrorType.ALREADY_VOTED,
-              'この投票権では既に投票が完了しています。',
-              false
-            ));
-            setCurrentStep('access-denied');
-          } else {
-            setCurrentStep('candidate-selection');
-            toast.success('認証が完了しました。候補者を選択してください。');
-          }
-        } else if (periodResult.status === 'PENDING') {
-          actions.setError(actions.createError(
-            VotingErrorType.VOTING_NOT_STARTED,
-            periodResult.message || '投票はまだ開始されていません。',
-            true
-          ));
-          setCurrentStep('access-denied');
-        } else {
-          actions.setError(actions.createError(
-            VotingErrorType.VOTING_CLOSED,
-            periodResult.message || '投票期間は終了しました。',
-            false
-          ));
-          setCurrentStep('access-denied');
-        }
-      } else {
-        actions.setError(actions.createError(
-          VotingErrorType.INVALID_QR_CODE,
-          '無効なQRコードです。正しいQRコードをスキャンしてください。',
-          true
-        ));
-        toast.error('無効なQRコードです。');
-      }
+      actions.setVoterToken('demo-token-' + Date.now());
+      setCurrentStep('candidate-selection');
+      toast.success('認証が完了しました。候補者を選択してください。');
     } catch (error) {
       console.error('QR scan error:', error);
       actions.setError(actions.createError(
@@ -148,16 +95,12 @@ export default function VotingPage() {
     try {
       setIsSubmitting(true);
       
-      // 投票の送信（APIを呼び出し）
-      const result = await castVote(state.selectedCandidate, state.voterToken);
+      // Static demo - simulate vote submission
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
-      if (result.success) {
-        actions.setHasVoted(true);
-        setCurrentStep('vote-complete');
-        toast.success(result.message || '投票が完了しました。ありがとうございました。');
-      } else {
-        throw new Error(result.error || '投票の送信に失敗しました。');
-      }
+      actions.setHasVoted(true);
+      setCurrentStep('vote-complete');
+      toast.success('投票が完了しました。ありがとうございました。');
     } catch (error) {
       console.error('Vote submission error:', error);
       actions.setError(actions.createError(
@@ -179,14 +122,8 @@ export default function VotingPage() {
     actions.resetState();
     setCurrentStep('qr-scan');
     
-    // 候補者を再読み込み
-    try {
-      const { candidates } = await getCandidates();
-      actions.setCandidates(candidates);
-    } catch (error) {
-      console.error('Failed to reload candidates:', error);
-      actions.setCandidates(mockCandidates);
-    }
+    // Static demo - reload mock candidates
+    actions.setCandidates(mockCandidates);
   };
 
   const selectedCandidateData = state.selectedCandidate 

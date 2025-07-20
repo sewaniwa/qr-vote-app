@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   experimental: {
     typedRoutes: true,
   },
   images: {
     domains: [],
+    unoptimized: true,
   },
   // WSL環境での性能向上設定
   webpack: (config, { dev }) => {
